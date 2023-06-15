@@ -1,6 +1,23 @@
 use image::Luma;
 use image::{GenericImageView, ImageBuffer, ImageError, Pixel};
 use ndarray::{arr2, Array};
+use clap::Parser;
+use std::path::PathBuf;
+
+#[derive(Parser)]
+#[command(name = "desat")]
+#[command(about = "Desaturate an image", long_about = None)]
+struct Args {
+    /// input image file path/name
+    #[arg(short, required = true)]
+    input_file: PathBuf,
+    /// output grayscale file path/name
+    #[arg(short('g'), long("gray"), default_value = "gray.png")]
+    ouptut_gray_file: PathBuf,
+    /// output noir file path/name
+    #[arg(short('n'), long("noir"), default_value = "noir.png")]
+    output_noir_file: PathBuf,
+}
 
 fn clamp(val: f64) -> u8 {
     if val < 0.0 {
@@ -55,12 +72,14 @@ fn desat(input_path: &str, output_path: &str) -> Result<(), ImageError> {
 }
 
 fn main() {
-    // let input_path =
-        // "/home/jono/Projects/Accelerant/codenoir/codenoir/content/posts/gallery/Lenna.png";
-    // let input_path = "/home/jono/Projects/Accelerant/codenoir/codenoir/content/posts/gallery/bigcombo.jpg";
-    let input_path = "/home/jono/Projects/Accelerant/codenoir/codenoir/content/posts/gallery/ny.jpg";
-    let output_path = "/home/jono/Projects/Accelerant/desat/tmp.png";
-    let output_gray_path = "/home/jono/Projects/Accelerant/desat/tmp_gray.png";
+
+    let args = Args::parse();
+
+    let input_path = args.input_file.to_str().expect("reading input file path");
+    println!("Converting input_file: {}", &input_path);
+
+    let output_path = args.output_noir_file.to_str().expect("reading output gray file path");
+    let output_gray_path = args.ouptut_gray_file.to_str().expect("reading output noir file path");
     match desat(input_path, output_path) {
         Ok(_) => println!("Completed Noir Conversion!"),
         Err(e) => println!("Error: {}", e),
