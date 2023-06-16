@@ -66,7 +66,6 @@ fn desat(input_path: &str, output_path: &str) -> Result<(), ImageError> {
         output.put_pixel(x, y, new_pixel);
     }
 
-    // let output_gray= DynamicImage::from(output).grayscale();
     output.save(output_path)?;
     Ok(())
 }
@@ -76,7 +75,7 @@ fn main() {
     let args = Args::parse();
 
     let input_path = args.input_file.to_str().expect("reading input file path");
-    println!("Converting input_file: {}", &input_path);
+    // println!("Converting input_file: {}", &input_path);
 
     let output_path = args.output_noir_file.to_str().expect("reading output gray file path");
     let output_gray_path = args.ouptut_gray_file.to_str().expect("reading output noir file path");
